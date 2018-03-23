@@ -69,10 +69,9 @@ __tween__ float tween_quad_out(float t, float s, float e, float d)
 
 __tween__ float tween_quad_inout(float t, float s, float e, float d)
 {
-    const float c = (e - s);
     return (t /= d * 0.5f) < 1.0f
-	? (c * 0.5f * t * t + s)
-	: (-c * 0.5f * ((t - 1.0f) * (t - 3.0f) - 1.0f) + s);
+	? ((e - s) * 0.5f * t * t + s)
+	: ((s - e) * 0.5f * ((t - 1.0f) * (t - 3.0f) - 1.0f) + s);
 }
 
 __tween__ float tween_cubic_in(float t, float s, float e, float d)
@@ -87,10 +86,9 @@ __tween__ float tween_cubic_out(float t, float s, float e, float d)
 
 __tween__ float tween_cubic_inout(float t, float s, float e, float d)
 {
-    const float c = (e - s);
     return (t /= d * 0.5f) < 1.0f
-	? (c * 0.5f * t * t * t + s)
-	: (-c * 0.5f * ((t -= 2.0f) * t * t + 2) + s);
+	? ((e - s) * 0.5f * t * t * t + s)
+	: ((s - e) * 0.5f * ((t -= 2.0f) * t * t + 2) + s);
 }
 
 __tween__ float tween_quart_in(float t, float s, float e, float d)
@@ -105,10 +103,9 @@ __tween__ float tween_quart_out(float t, float s, float e, float d)
 
 __tween__ float tween_quart_inout(float t, float s, float e, float d)
 {
-    const float c = (e - s);
     return (t /= d * 0.5f) < 1.0f
-	? (c * 0.5f * t * t * t * t + s)
-	: (-c * 0.5f * ((t -= 2.0f) * t * t * t - 2.0f) + s);
+	? ((e - s) * 0.5f * t * t * t * t + s)
+	: ((s - e) * 0.5f * ((t -= 2.0f) * t * t * t - 2.0f) + s);
 }
 
 __tween__ float tween_quint_in(float t, float s, float e, float d)
@@ -123,10 +120,9 @@ __tween__ float tween_quint_out(float t, float s, float e, float d)
 
 __tween__ float tween_quint_inout(float t, float s, float e, float d)
 {
-    const float c = (e - s);
     return (t /= d * 0.5f) < 1.0f
-	? (c * 0.5f * t * t * t * t * t + s)
-	: (-c * 0.5f * ((t -= 2.0f) * t * t * t * t + 2.0f) + s);
+	? ((e - s) * 0.5f * t * t * t * t * t + s)
+	: ((s - e) * 0.5f * ((t -= 2.0f) * t * t * t * t + 2.0f) + s);
 }
 
 __tween__ float tween_sine_in(float t, float s, float e, float d)
@@ -186,10 +182,9 @@ __tween__ float tween_circle_out(float t, float s, float e, float d)
 
 __tween__ float tween_circle_inout(float t, float s, float e, float d)
 {
-    const float c = (e - s);
     return (t /= d * 0.5f) < 1.0f
-	? (-c * 0.5f * (sqrtf(1.0f - t * t) - 1.0f) + s)
-	: ( c * 0.5f * (sqrtf(1.0f - (t -= 2) * t) + 1.0f) + s);
+	? ((e - s) * 0.5f * (sqrtf(1.0f - t * t) - 1.0f) + s)
+	: ((s - e) * 0.5f * (sqrtf(1.0f - (t -= 2) * t) + 1.0f) + s);
 }
 
 __tween__ float tween_elastic_in(float t, float s, float e, float d)
