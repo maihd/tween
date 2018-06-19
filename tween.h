@@ -4,23 +4,27 @@
 #include <math.h>
 
 #if defined(_MSC_VER)
-# define __tween__ static __forceinline
+#  define __tween__ static __forceinline
 #elif defined(__GNUC__)
-# define __tween__ static __inline__ __attribute__((always_inline, pure))
+#  define __tween__ static __inline__ __attribute__((always_inline))
 #else
-# ifdef __cplusplus
-# define __tween__ static inline
-# else
-# define __tween__ static
-# endif
+#  ifdef __cplusplus
+#  define __tween__ static inline
+#  else
+#  define __tween__ static
+#  endif
 #endif
 
 #ifdef __cplusplus
-# define __TWEEN_EXTERN_C     extern "C" {
-# define __TWEEN_EXTERN_C_END }
+#  define __TWEEN_EXTERN_C     extern "C" {
+#  define __TWEEN_EXTERN_C_END }
 #else
-# define __TWEEN_EXTERN_C
-# define __TWEEN_EXTERN_C_END
+#  define __TWEEN_EXTERN_C
+#  define __TWEEN_EXTERN_C_END
+#endif
+
+#ifndef PI
+#define PI 3.14159265358979f
 #endif
 
 __TWEEN_EXTERN_C;
@@ -70,8 +74,8 @@ __tween__ float tween_quad_out(float t, float s, float e, float d)
 __tween__ float tween_quad_inout(float t, float s, float e, float d)
 {
     return (t /= d * 0.5f) < 1.0f
-	? ((e - s) * 0.5f * t * t + s)
-	: ((s - e) * 0.5f * ((t - 1.0f) * (t - 3.0f) - 1.0f) + s);
+        ? ((e - s) * 0.5f * t * t + s)
+        : ((s - e) * 0.5f * ((t - 1.0f) * (t - 3.0f) - 1.0f) + s);
 }
 
 __tween__ float tween_cubic_in(float t, float s, float e, float d)
@@ -87,8 +91,8 @@ __tween__ float tween_cubic_out(float t, float s, float e, float d)
 __tween__ float tween_cubic_inout(float t, float s, float e, float d)
 {
     return (t /= d * 0.5f) < 1.0f
-	? ((e - s) * 0.5f * t * t * t + s)
-	: ((s - e) * 0.5f * ((t -= 2.0f) * t * t + 2) + s);
+	    ? ((e - s) * 0.5f * t * t * t + s)
+	    : ((s - e) * 0.5f * ((t -= 2.0f) * t * t + 2.0f) + s);
 }
 
 __tween__ float tween_quart_in(float t, float s, float e, float d)
@@ -104,8 +108,8 @@ __tween__ float tween_quart_out(float t, float s, float e, float d)
 __tween__ float tween_quart_inout(float t, float s, float e, float d)
 {
     return (t /= d * 0.5f) < 1.0f
-	? ((e - s) * 0.5f * t * t * t * t + s)
-	: ((s - e) * 0.5f * ((t -= 2.0f) * t * t * t - 2.0f) + s);
+	    ? ((e - s) * 0.5f * t * t * t * t + s)
+	    : ((s - e) * 0.5f * ((t -= 2.0f) * t * t * t - 2.0f) + s);
 }
 
 __tween__ float tween_quint_in(float t, float s, float e, float d)
@@ -121,23 +125,23 @@ __tween__ float tween_quint_out(float t, float s, float e, float d)
 __tween__ float tween_quint_inout(float t, float s, float e, float d)
 {
     return (t /= d * 0.5f) < 1.0f
-	? ((e - s) * 0.5f * t * t * t * t * t + s)
-	: ((s - e) * 0.5f * ((t -= 2.0f) * t * t * t * t + 2.0f) + s);
+	    ? ((e - s) * 0.5f * t * t * t * t * t + s)
+	    : ((s - e) * 0.5f * ((t -= 2.0f) * t * t * t * t + 2.0f) + s);
 }
 
 __tween__ float tween_sine_in(float t, float s, float e, float d)
 {
-    return (s - e) * cosf(t / d * M_PI * 0.5f) + e;
+    return (s - e) * cosf(t / d * PI * 0.5f) + e;
 }
 
 __tween__ float tween_sine_out(float t, float s, float e, float d)
 {
-    return (e - s) * sinf(t / d * M_PI * 0.5f) + s;
+    return (e - s) * sinf(t / d * PI * 0.5f) + s;
 }
 
 __tween__ float tween_sine_inout(float t, float s, float e, float d)
 {
-    return (s - e) * 0.5f * (cosf(M_PI * t / d) - 1.0f) + s;
+    return (s - e) * 0.5f * (cosf(PI * t / d) - 1.0f) + s;
 }
 
 __tween__ float tween_expo_in(float t, float s, float e, float d)
@@ -147,26 +151,26 @@ __tween__ float tween_expo_in(float t, float s, float e, float d)
 
 __tween__ float tween_expo_out(float t, float s, float e, float d)
 {
-    return t == d ? e : (s - e) * (-powf(2.0f, -10.0f * t / d) - 1.0f) + s;
+    return t == d ? e : (s - e) * (-powf(2.0f, -10.0f * t / d) + 1.0f) + s;
 }
 
 __tween__ float tween_expo_inout(float t, float s, float e, float d)
 {
     if (t == 0)
     {
-	return s;
+	    return s;
     }
     else if (t == d)
     {
-	return e;
+	    return e;
     }
     else if ((t /= d * 0.5f) < 1.0f)
     {
-	return (e - s) * powf(2, 10.0f * (t - 1.0f)) + s;
+	    return (e - s) * powf(2, 10.0f * (t - 1.0f)) + s;
     }
     else
     {
-	return (e - s) * (-powf(2, -10.0f * (t - 1.0f)) + 2.0f) + s;
+	    return (e - s) * (-powf(2, -10.0f * (t - 1.0f)) + 2.0f) + s;
     }
 }
 
@@ -183,26 +187,26 @@ __tween__ float tween_circle_out(float t, float s, float e, float d)
 __tween__ float tween_circle_inout(float t, float s, float e, float d)
 {
     return (t /= d * 0.5f) < 1.0f
-	? ((e - s) * 0.5f * (sqrtf(1.0f - t * t) - 1.0f) + s)
-	: ((s - e) * 0.5f * (sqrtf(1.0f - (t -= 2) * t) + 1.0f) + s);
+        ? ((e - s) * 0.5f * (sqrtf(1.0f - t * t) - 1.0f) + s)
+        : ((s - e) * 0.5f * (sqrtf(1.0f - (t -= 2) * t) + 1.0f) + s);
 }
 
 __tween__ float tween_elastic_in(float t, float s, float e, float d)
 {
     if (t == 0)
     {
-	return s;
+	    return s;
     }
     else if ((t /= d) >= 1.0f)
     {
-	return e;
+	    return e;
     }
 
     const float a = (e - s);
     const float b = (d * 0.3f);
     const float c = (a < 0) ? (b * 0.25f) : b;
     const float p = powf(2, 10.0f * (t -= 1));
-    const float q = sinf((t * d - c) * (2 * M_PI) / b);
+    const float q = sinf((t * d - c) * (2 * PI) / b);
     return -(a * p * q) + s;
 }
 
@@ -210,18 +214,18 @@ __tween__ float tween_elastic_out(float t, float s, float e, float d)
 {
     if (t == 0)
     {
-	return s;
+	    return s;
     }
     else if ((t /= d) >= 1.0f)
     {
-	return e;
+	    return e;
     }
 
     const float a = (e - s);
     const float b = (d * 0.3f);
     const float c = (a < 0) ? (b * 0.25f) : b;
     const float p = powf(2, -10.0f * t);
-    const float q = sinf((t * d - c) * (2 * M_PI) / b);
+    const float q = sinf((t * d - c) * (2.0f * PI) / b);
     return (a * p * q) + e;
 }
 
@@ -229,11 +233,11 @@ __tween__ float tween_elastic_inout(float t, float s, float e, float d)
 {
     if (t == 0)
     {
-	return s;
+	    return s;
     }
     else if ((t /= d) >= 1.0f)
     {
-	return e;
+	    return e;
     }
 
     const float a = (e - s);
@@ -241,15 +245,15 @@ __tween__ float tween_elastic_inout(float t, float s, float e, float d)
     const float c = (a < 0) ? (b * 0.25f) : b;
     if (t < 1.0f)
     {
-	const float p = powf(2,  10.0f * (t -= 1.0f));
-	const float q = sinf((t * d - c) * (2 * M_PI) / b);
-	return -0.5f * (a * p * q) + s;
+	    const float p = powf(2,  10.0f * (t -= 1.0f));
+	    const float q = sinf((t * d - c) * (2.0f * PI) / b);
+	    return -0.5f * (a * p * q) + s;
     }
     else
     {
-	const float p = powf(2, -10.0f * (t -= 1.0f));
-	const float q = sinf((t * d - c) * (2 * M_PI) / b);
-	return  0.5f * (a * p * q) + e;
+	    const float p = powf(2, -10.0f * (t -= 1.0f));
+	    const float q = sinf((t * d - c) * (2.0f * PI) / b);
+	    return  0.5f * (a * p * q) + e;
     }
 }
 
@@ -258,19 +262,19 @@ __tween__ float tween_bounce_out(float t, float s, float e, float d)
     const float c = (e - s);
     if ((t /= d) < 1.0f / 2.75f)
     {
-	return c * (7.5625f * t * t) + s;
+	    return c * (7.5625f * t * t) + s;
     }
     else if (t < 2.0f / 2.75f)
     {
-	return c * (7.5625f * (t -= 1.5f / 2.75f) * t + 0.75f) + s;
+	    return c * (7.5625f * (t -= 1.5f / 2.75f) * t + 0.75f) + s;
     }
     else if (t < 2.5f / 2.75f)
     {
-	return c * (7.5625f * (t -= 2.25f / 2.75f) * t + 0.9375f) + s;
+	    return c * (7.5625f * (t -= 2.25f / 2.75f) * t + 0.9375f) + s;
     }
     else
     {
-	return c * (7.5625f * (t -= 2.625f / 2.75f) * t + 0.984375f) + s;
+	    return c * (7.5625f * (t -= 2.625f / 2.75f) * t + 0.984375f) + s;
     }
 }
 
@@ -283,11 +287,11 @@ __tween__ float tween_bounce_inout(float t, float s, float e, float d)
 {
     if (t < d * 0.5f)
     {
-	return 0.5f * tween_bounce_in(t * 2.0f, s, e, d);
+	    return 0.5f * tween_bounce_in(t * 2.0f, s, e, d);
     }
     else
     {
-	return 0.5f * tween_bounce_out(t * 2.0f, s, e, d);
+	    return 0.5f * tween_bounce_out(t * 2.0f, s, e, d);
     }
 }
 
