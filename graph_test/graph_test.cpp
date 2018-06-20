@@ -50,7 +50,7 @@ inline void usleep(long us)
     if (fn)
     {
         LARGE_INTEGER time;
-        time.QuadPart = -us / 10;
+        time.QuadPart = -us * 10;
         fn(FALSE, &time);
     }
     else
@@ -238,11 +238,15 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
         ImGui::NewFrame();
 
         static int func = 0;
+        static float pos;
         if (ImGui::Begin("Menu"))
         {
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
-            ImGui::Combo("Functions", &func, tween_funcnames, IM_ARRAYSIZE(tween_funcnames));
+            if (ImGui::Combo("Functions", &func, tween_funcnames, IM_ARRAYSIZE(tween_funcnames)))
+            {
+                pos = 0;
+            }
         }
         ImGui::End();
 
@@ -250,6 +254,37 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
         {
             ImGui::Text("Functions: %s", tween_funcnames[func]);
             ImGui::TweenGraph(tween_funcnames[func], tween_funcs[func]);
+        }
+        ImGui::End();
+
+        if (ImGui::Begin("Animation"))
+        {
+            ImDrawList* DrawList = ImGui::GetWindowDrawList();
+            ImGuiWindow* Window  = ImGui::GetCurrentWindow();
+            if (!Window->SkipItems)
+            {
+                const ImVec2 size = ImGui::GetContentRegionAvail();
+                const ImVec2 cursor = Window->DC.CursorPos;
+
+                static float time = 0;
+                static float sign = 1;
+                time += delta_time;
+                if (time >= 1.0f)
+                {
+                    sign = -sign;
+                    time = 0.0f;
+                }
+
+                if (sign > 0)
+                {
+                    pos = tween_funcs[func](size.x * 0.1f, size.x * 0.9f, time);
+                }
+                else
+                {
+                    pos = tween_funcs[func](size.x * 0.9f, size.x * 0.1f, time);
+                }
+                DrawList->AddCircle(ImVec2(cursor.x + pos, cursor.y + size.y * 0.5f), 12.0f, ImGui::GetColorU32(ImGuiCol_TextDisabled));
+            }
         }
         ImGui::End();
 
