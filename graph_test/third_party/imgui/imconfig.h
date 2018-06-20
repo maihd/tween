@@ -52,8 +52,11 @@
 // This will be inlined as part of ImVec2 and ImVec4 class declarations.
 /*
 #define IM_VEC2_CLASS_EXTRA                                                 \
-        ImVec2(const MyVec2& f) { x = f.x; y = f.y; }                       \
-        operator MyVec2() const { return MyVec2(x,y); }
+        friend inline ImVec2 operator+(const ImVec2& a, const ImVec2& b)    \
+        {                                                                   \
+            return ImVec2(a.x + b.x, a.y + b.y);                            \
+        }
+
 
 #define IM_VEC4_CLASS_EXTRA                                                 \
         ImVec4(const MyVec4& f) { x = f.x; y = f.y; z = f.z; w = f.w; }     \

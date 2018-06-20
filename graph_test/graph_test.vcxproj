@@ -161,6 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\tween.hpp" />
     <ClInclude Include="third_party\imgui\imconfig.h" />
     <ClInclude Include="third_party\imgui\imgui.h" />
     <ClInclude Include="third_party\imgui\imgui_impl_opengl3.h" />
@@ -169,6 +170,7 @@
     <ClInclude Include="third_party\imgui\stb_rect_pack.h" />
     <ClInclude Include="third_party\imgui\stb_textedit.h" />
     <ClInclude Include="third_party\imgui\stb_truetype.h" />
+    <ClInclude Include="tween_funcs.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="graph_test.cpp" />

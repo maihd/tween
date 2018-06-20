@@ -103,14 +103,14 @@ namespace tween
 
         __tween__ float out(float s, float e, float t)
         {
-            return s + (s - e) * ((t -= 1.0f) * t * t + 1.0f);
+            return s + (s - e) * ((t -= 1.0f) * t * t - 1.0f);
         }
 
         __tween__ float inout(float s, float e, float t)
         {
             return (t *= 2.0f) < 1.0f
                 ? s + (e - s) * 0.5f * t * t * t
-                : s + (s - e) * 0.5f * ((t -= 2.0f) * t * t + 2.0f);
+                : s + (s - e) * 0.5f * ((t -= 2.0f) * t * t - 2.0f);
         }
     }
 
