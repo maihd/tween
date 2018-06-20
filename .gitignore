@@ -3,3 +3,8 @@
 unit_test/.vs
 unit_test/obj
 unit_test/Debug
+unit_test/Release
+graph_test/.vs
+graph_test/obj
+graph_test/Debug
+graph_test/Release
