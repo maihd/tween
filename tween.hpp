@@ -103,14 +103,14 @@ namespace tween
 
         __tween__ float out(float s, float e, float t)
         {
-            return s + (s - e) * ((t -= 1.0f) * t * t - 1.0f);
+            return s + (e - s) * ((t -= 1.0f) * t * t + 1.0f);
         }
 
         __tween__ float inout(float s, float e, float t)
         {
             return (t *= 2.0f) < 1.0f
                 ? s + (e - s) * 0.5f * t * t * t
-                : s + (s - e) * 0.5f * ((t -= 2.0f) * t * t - 2.0f);
+                : s + (e - s) * 0.5f * ((t -= 2.0f) * t * t + 2.0f);
         }
     }
 
@@ -143,14 +143,14 @@ namespace tween
 
         __tween__ float out(float s, float e, float t)
         {
-            return s + (s - e) * ((t -= 1.0f) * t * t * t * t - 1.0f);
+            return s + (e - s) * ((t -= 1.0f) * t * t * t * t + 1.0f);
         }
 
         __tween__ float inout(float s, float e, float t)
         {
             return (t *= 2.0f) < 1.0f
                 ? s + (e - s) * 0.5f * t * t * t * t * t
-                : s + (s - e) * 0.5f * ((t -= 2.0f) * t * t * t * t - 2.0f);
+                : s + (e - s) * 0.5f * ((t -= 2.0f) * t * t * t * t + 2.0f);
         }
     }
 
@@ -168,7 +168,7 @@ namespace tween
 
         __tween__ float inout(float s, float e, float t)
         {
-            return s + (e - s) * (cosf(t * PI) - 1.0f);
+            return s + (s - e) * 0.5f * (cosf(t * PI) - 1.0f);
         }
     }
 
@@ -181,7 +181,7 @@ namespace tween
 
         __tween__ float out(float s, float e, float t)
         {
-            return t >= 1.0f ? e : s + (s - e) * (-powf(2.0f, -10.0f * t) + 1.0f);
+            return t >= 1.0f ? e : s + (e - s) * (1.0f - powf(2.0f, -10.0f * t));
         }
 
         __tween__ float inout(float s, float e, float t)
@@ -189,9 +189,9 @@ namespace tween
             if (t <= 0.0f) return s;
             if (t >= 1.0f) return e;
             
-            return (t *= 2.0f) < 1.0f
-                ? s + (e - s) * 0.5f * powf(2.0f, 10.0f * (t - 1.0f))
-                : s + (s - e) * 0.5f * (-powf(2.0f, -10.0f * t) + 2.0f);
+            return t < 0.5f
+                ? in(s, s + (e - s) * 0.5f, t * 2.0f)
+                : out(s + (e - s) * 0.5f, e, (t - 0.5f) * 2.0f);
         }
     }
 
@@ -210,8 +210,8 @@ namespace tween
         __tween__ float inout(float s, float e, float t)
         {
             return (t *= 2.0f) < 1.0f
-                ? s + (e - s) * 0.5f * (sqrtf(1.0f - t * t) - 1.0f)
-                : s + (s - e) * 0.5f * (sqrtf(1.0f - (t - 2.0f) * (t - 2.0f)) + 1.0f);
+                ? s + (s - e) * 0.5f * (sqrtf(1.0f - t * t) - 1.0f)
+                : s + (e - s) * 0.5f * (sqrtf(1.0f - (t - 2.0f) * (t - 2.0f)) + 1.0f);
         }
     }
 
@@ -298,8 +298,8 @@ namespace tween
         __tween__ float inout(float s, float e, float t)
         {
             return t < 0.5f
-                ? 0.5f * in(s, e, t * 2.0f)
-                : 0.5f * out(s, e, t * 2.0f);
+                ? in(s, s + (e - s) * 0.5f, t * 2.0f)
+                : out(s + (e - s) * 0.5f, e, (t - 0.5f) * 2.0f);
         }
     }
 }
