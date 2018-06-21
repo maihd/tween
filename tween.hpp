@@ -50,17 +50,17 @@
 #include <math.h>
 
 #ifndef __tween__
-#if defined(_MSC_VER)
-#  define __tween__ static __forceinline
-#elif defined(__GNUC__)
-#  define __tween__ static __inline__ __attribute__((always_inline))
-#else
-#  ifdef __cplusplus
-#  define __tween__ static inline
+#  if defined(_MSC_VER)
+#    define __tween__ static __forceinline
+#  elif defined(__GNUC__)
+#    define __tween__ static __inline__ __attribute__((always_inline))
 #  else
-#  define __tween__ static
+#    ifdef __cplusplus
+#    define __tween__ static inline
+#    else
+#    define __tween__ static
+#    endif
 #  endif
-#endif
 #endif /* __tween__ */      
 
 #ifndef PI

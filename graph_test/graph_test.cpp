@@ -11,7 +11,10 @@
 #include <imgui_impl_sdl.h>
 #include <imgui_impl_opengl3.h>
 
-#include "../tween.hpp"
+#include "../tween.h"
+#include "../tween.hpp"          
+
+#define TEST_C_VERSION
 
 
 void show_message_box(const char* msg, SDL_Window* window = NULL)
@@ -67,19 +70,19 @@ extern "C" {
 namespace ImGui
 {
     template<int steps>
-    void tween_table(ImVec2 results[steps + 1], float (*func)(float, float, float))
+    void tween_table(ImVec2 results[steps + 1], float (*func)(float, float, float, float))
     {
         for (unsigned step = 0; step <= steps; ++step)
         {
             ImVec2 point = {
                 (float)step / steps,
-                func(0, 1, (float)step / steps)
+                func(0, 1, (float)step / steps, 1.0f)
             };
             results[step] = point;
         }
     }
 
-    void TweenGraph(const char *label, float (*func)(float, float, float))
+    void TweenGraph(const char *label, float (*func)(float, float, float, float))
     {
         // visuals
         enum { SMOOTHNESS = 128 }; // curve smoothness: the higher number of segments, the smoother curve
@@ -192,18 +195,26 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
     
     ImGui::StyleColorsDark();
 
-#define TWEEN_FUNC(x) x ,
-    typedef float (*tween_f)(float, float, float);
+#define TWEEN_FUNC(x) x ,     
+    typedef float (*tween_f)(float, float, float, float);
     tween_f tween_funcs[] =
     {
+    #ifdef TEST_C_VERSION
     #include "tween_funcs.h"
+    #else
+    #include "tween_funcs.hpp"
+    #endif
     };
 #undef TWEEN_FUNC
 
 #define TWEEN_FUNC(x) #x ,
     const char* tween_funcnames[] = 
     {
+    #ifdef TEST_C_VERSION
     #include "tween_funcs.h"
+    #else
+    #include "tween_funcs.hpp"
+    #endif
     };
 #undef TWEEN_FUNC
 
@@ -277,11 +288,11 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 
                 if (sign > 0)
                 {
-                    pos = tween_funcs[func](size.x * 0.1f, size.x * 0.9f, time);
+                    pos = tween_funcs[func](size.x * 0.1f, size.x * 0.9f, time, 1.0f);
                 }
                 else
                 {
-                    pos = tween_funcs[func](size.x * 0.9f, size.x * 0.1f, time);
+                    pos = tween_funcs[func](size.x * 0.9f, size.x * 0.1f, time, 1.0f);
                 }
                 DrawList->AddCircle(ImVec2(cursor.x + pos, cursor.y + size.y * 0.5f), 12.0f, ImGui::GetColorU32(ImGuiCol_TextDisabled));
             }

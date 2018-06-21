@@ -172,6 +172,7 @@
     <ClInclude Include="third_party\imgui\stb_textedit.h" />
     <ClInclude Include="third_party\imgui\stb_truetype.h" />
     <ClInclude Include="tween_funcs.h" />
+    <ClInclude Include="tween_funcs.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="graph_test.cpp" />

@@ -42,10 +42,13 @@
     <ClInclude Include="..\tween.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tween_funcs.h">
+    <ClInclude Include="..\tween.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\tween.h">
+    <ClInclude Include="tween_funcs.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tween_funcs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

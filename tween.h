@@ -3,15 +3,17 @@
 
 #include <math.h>
 
-#if defined(_MSC_VER)
-#  define __tween__ static __forceinline
-#elif defined(__GNUC__)
-#  define __tween__ static __inline__ __attribute__((always_inline))
-#else
-#  ifdef __cplusplus
-#  define __tween__ static inline
+#ifndef __tween__
+#  if defined(_MSC_VER)
+#    define __tween__ static __forceinline
+#  elif defined(__GNUC__)
+#    define __tween__ static __inline__ __attribute__((always_inline))
 #  else
-#  define __tween__ static
+#    ifdef __cplusplus
+#    define __tween__ static inline
+#    else
+#    define __tween__ static
+#    endif
 #  endif
 #endif
 
@@ -56,105 +58,105 @@ __TWEEN_EXTERN_C;
  *  - d duration
  ***************************************/
 
-__tween__ float tween_linear(float t, float s, float e, float d)
+__tween__ float tween_linear(float s, float e, float t, float d)
 {
     return (e - s) * t / d + s;
 }
 
-__tween__ float tween_quad_in(float t, float s, float e, float d)
+__tween__ float tween_quad_in(float s, float e, float t, float d)
 {
     return (e - s) * (t /= d) * t + s;
 }
 
-__tween__ float tween_quad_out(float t, float s, float e, float d)
+__tween__ float tween_quad_out(float s, float e, float t, float d)
 {
     return (s - e) * (t /= d) * (t - 2.0f) + s;
 }
 
-__tween__ float tween_quad_inout(float t, float s, float e, float d)
+__tween__ float tween_quad_inout(float s, float e, float t, float d)
 {
     return (t /= d * 0.5f) < 1.0f
         ? ((e - s) * 0.5f * t * t + s)
         : ((s - e) * 0.5f * ((t - 1.0f) * (t - 3.0f) - 1.0f) + s);
 }
 
-__tween__ float tween_cubic_in(float t, float s, float e, float d)
+__tween__ float tween_cubic_in(float s, float e, float t, float d)
 {
-    return (e - s) * (t /= d) * t * t + s;
+    return s + (e - s) * (t /= d) * t * t;
 }
 
-__tween__ float tween_cubic_out(float t, float s, float e, float d)
+__tween__ float tween_cubic_out(float s, float e, float t, float d)
 {
-    return (s - e) * ((t = t / d - 1.0f) * t * t + 1.0f) + s;
+    return s + (e - s) * ((t = t / d - 1.0f) * t * t + 1.0f);
 }
 
-__tween__ float tween_cubic_inout(float t, float s, float e, float d)
+__tween__ float tween_cubic_inout(float s, float e, float t, float d)
 {
     return (t /= d * 0.5f) < 1.0f
-	    ? ((e - s) * 0.5f * t * t * t + s)
-	    : ((s - e) * 0.5f * ((t -= 2.0f) * t * t + 2.0f) + s);
+	    ? s + (e - s) * 0.5f * t * t * t
+	    : s + (e - s) * 0.5f * ((t -= 2.0f) * t * t + 2.0f);
 }
 
-__tween__ float tween_quart_in(float t, float s, float e, float d)
+__tween__ float tween_quart_in(float s, float e, float t, float d)
 {
     return (e - s) * (t /= d) * t * t * t + s;
 }
 
-__tween__ float tween_quart_out(float t, float s, float e, float d)
+__tween__ float tween_quart_out(float s, float e, float t, float d)
 {
     return (s - e) * ((t = t / d - 1.0f) * t * t * t - 1.0f) + s; 
 }
 
-__tween__ float tween_quart_inout(float t, float s, float e, float d)
+__tween__ float tween_quart_inout(float s, float e, float t, float d)
 {
     return (t /= d * 0.5f) < 1.0f
 	    ? ((e - s) * 0.5f * t * t * t * t + s)
 	    : ((s - e) * 0.5f * ((t -= 2.0f) * t * t * t - 2.0f) + s);
 }
 
-__tween__ float tween_quint_in(float t, float s, float e, float d)
+__tween__ float tween_quint_in(float s, float e, float t, float d)
 {
-    return (e - s) * (t /= d) * t * t * t * t + s;
+    return s + (e - s) * (t /= d) * t * t * t * t;
 }
 
-__tween__ float tween_quint_out(float t, float s, float e, float d)
+__tween__ float tween_quint_out(float s, float e, float t, float d)
 {
-    return (s - e) * ((t = t / d - 1.0f) * t * t * t * t - 1.0f) + s; 
+    return s + (e - s) * ((t = t / d - 1.0f) * t * t * t * t + 1.0f); 
 }
 
-__tween__ float tween_quint_inout(float t, float s, float e, float d)
+__tween__ float tween_quint_inout(float s, float e, float t, float d)
 {
     return (t /= d * 0.5f) < 1.0f
-	    ? ((e - s) * 0.5f * t * t * t * t * t + s)
-	    : ((s - e) * 0.5f * ((t -= 2.0f) * t * t * t * t + 2.0f) + s);
+	    ? s + (e - s) * 0.5f * t * t * t * t * t
+	    : s + (e - s) * 0.5f * ((t -= 2.0f) * t * t * t * t + 2.0f);
 }
 
-__tween__ float tween_sine_in(float t, float s, float e, float d)
+__tween__ float tween_sine_in(float s, float e, float t, float d)
 {
     return (s - e) * cosf(t / d * PI * 0.5f) + e;
 }
 
-__tween__ float tween_sine_out(float t, float s, float e, float d)
+__tween__ float tween_sine_out(float s, float e, float t, float d)
 {
     return (e - s) * sinf(t / d * PI * 0.5f) + s;
 }
 
-__tween__ float tween_sine_inout(float t, float s, float e, float d)
+__tween__ float tween_sine_inout(float s, float e, float t, float d)
 {
     return (s - e) * 0.5f * (cosf(PI * t / d) - 1.0f) + s;
 }
 
-__tween__ float tween_expo_in(float t, float s, float e, float d)
+__tween__ float tween_expo_in(float s, float e, float t, float d)
 {
-    return t == 0 ? s : (e - s) * powf(2.0f, 10.0f * (t / d - 1.0f)) + s; 
+    return t == 0 ? s : s + (e - s) * powf(2.0f, 10.0f * (t / d - 1.0f)); 
 }
 
-__tween__ float tween_expo_out(float t, float s, float e, float d)
+__tween__ float tween_expo_out(float s, float e, float t, float d)
 {
-    return t == d ? e : (s - e) * (-powf(2.0f, -10.0f * t / d) + 1.0f) + s;
+    return t == d ? e : s + (e - s) * (1.0f - powf(2.0f, -10.0f * t / d));
 }
 
-__tween__ float tween_expo_inout(float t, float s, float e, float d)
+__tween__ float tween_expo_inout(float s, float e, float t, float d)
 {
     if (t == 0)
     {
@@ -164,34 +166,34 @@ __tween__ float tween_expo_inout(float t, float s, float e, float d)
     {
 	    return e;
     }
-    else if ((t /= d * 0.5f) < 1.0f)
+    else if (t < d * 0.5f)
     {
-	    return (e - s) * powf(2, 10.0f * (t - 1.0f)) + s;
+        return 0.5f * tween_expo_in(s, e, t * 2.0f, d);
     }
     else
     {
-	    return (e - s) * (-powf(2, -10.0f * (t - 1.0f)) + 2.0f) + s;
+        return tween_expo_out(s + (e - s) * 0.5f, e, (t - 0.5f) * 2.0f, d);
     }
 }
 
-__tween__ float tween_circle_in(float t, float s, float e, float d)
+__tween__ float tween_circle_in(float s, float e, float t, float d)
 {
-    return (s - e) * (sqrtf(1 - (t /= d) * t) - 1) + s;
+    return s + (s - e) * (sqrtf(1.0f - (t /= d) * t) - 1.0f);
 }
 
-__tween__ float tween_circle_out(float t, float s, float e, float d)
+__tween__ float tween_circle_out(float s, float e, float t, float d)
 {
-    return (e - s) * (sqrtf(1 - (t = t / d - 1.0f) * t)) + s;
+    return s + (e - s) * (sqrtf(1 - (t = t / d - 1.0f) * t));
 }
 
-__tween__ float tween_circle_inout(float t, float s, float e, float d)
+__tween__ float tween_circle_inout(float s, float e, float t, float d)
 {
     return (t /= d * 0.5f) < 1.0f
-        ? ((e - s) * 0.5f * (sqrtf(1.0f - t * t) - 1.0f) + s)
-        : ((s - e) * 0.5f * (sqrtf(1.0f - (t -= 2) * t) + 1.0f) + s);
+        ? s + (s - e) * 0.5f * (sqrtf(1.0f - t * t) - 1.0f)
+        : s + (e - s) * 0.5f * (sqrtf(1.0f - (t -= 2.0f) * t) + 1.0f);
 }
 
-__tween__ float tween_elastic_in(float t, float s, float e, float d)
+__tween__ float tween_elastic_in(float s, float e, float t, float d)
 {
     if (t == 0)
     {
@@ -210,7 +212,7 @@ __tween__ float tween_elastic_in(float t, float s, float e, float d)
     return -(a * p * q) + s;
 }
 
-__tween__ float tween_elastic_out(float t, float s, float e, float d)
+__tween__ float tween_elastic_out(float s, float e, float t, float d)
 {
     if (t == 0)
     {
@@ -229,7 +231,7 @@ __tween__ float tween_elastic_out(float t, float s, float e, float d)
     return (a * p * q) + e;
 }
 
-__tween__ float tween_elastic_inout(float t, float s, float e, float d)
+__tween__ float tween_elastic_inout(float s, float e, float t, float d)
 {
     if (t == 0)
     {
@@ -257,7 +259,7 @@ __tween__ float tween_elastic_inout(float t, float s, float e, float d)
     }
 }
 
-__tween__ float tween_bounce_out(float t, float s, float e, float d)
+__tween__ float tween_bounce_out(float s, float e, float t, float d)
 {
     const float c = (e - s);
     if ((t /= d) < 1.0f / 2.75f)
@@ -278,20 +280,20 @@ __tween__ float tween_bounce_out(float t, float s, float e, float d)
     }
 }
 
-__tween__ float tween_bounce_in(float t, float s, float e, float d)
+__tween__ float tween_bounce_in(float s, float e, float t, float d)
 {
-    return e - tween_bounce_out(d - t, s, e, d);
+    return e - tween_bounce_out(s, e, d - t, d);
 }
 
-__tween__ float tween_bounce_inout(float t, float s, float e, float d)
+__tween__ float tween_bounce_inout(float s, float e, float t, float d)
 {
     if (t < d * 0.5f)
     {
-	    return 0.5f * tween_bounce_in(t * 2.0f, s, e, d);
+	    return 0.5f * tween_bounce_in(s, e, t * 2.0f, d);
     }
     else
     {
-	    return 0.5f * tween_bounce_out(t * 2.0f, s, e, d);
+	    return tween_bounce_out(s + (e - s) * 0.5f, e, (t - 0.5f) * 2.0f, d);
     }
 }
 
