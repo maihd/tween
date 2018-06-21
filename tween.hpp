@@ -92,6 +92,21 @@ namespace tween
                 ? s + (e - s) * 0.5f * t * t
                 : s + (s - e) * 0.5f * ((t - 1.0f) * (t - 3.0f) - 1.0f);
         }
+
+        __tween__ float in(float s, float e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ float out(float s, float e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ float inout(float s, float e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
     }
 
     namespace cubic
@@ -111,6 +126,21 @@ namespace tween
             return (t *= 2.0f) < 1.0f
                 ? s + (e - s) * 0.5f * t * t * t
                 : s + (e - s) * 0.5f * ((t -= 2.0f) * t * t + 2.0f);
+        }
+
+        __tween__ float in(float s, float e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ float out(float s, float e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ float inout(float s, float e, float t, float d)
+        {
+            return out(s, e, t / d);
         }
     }
 
@@ -132,6 +162,21 @@ namespace tween
                 ? s + (e - s) * 0.5f * t * t * t
                 : s + (s - e) * 0.5f * ((t -= 2.0f) * t * t * t - 2.0f);
         }
+
+        __tween__ float in(float s, float e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ float out(float s, float e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ float inout(float s, float e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
     }
 
     namespace quint
@@ -152,6 +197,21 @@ namespace tween
                 ? s + (e - s) * 0.5f * t * t * t * t * t
                 : s + (e - s) * 0.5f * ((t -= 2.0f) * t * t * t * t + 2.0f);
         }
+
+        __tween__ float in(float s, float e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ float out(float s, float e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ float inout(float s, float e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
     }
 
     namespace sine
@@ -169,6 +229,21 @@ namespace tween
         __tween__ float inout(float s, float e, float t)
         {
             return s + (s - e) * 0.5f * (cosf(t * PI) - 1.0f);
+        }
+
+        __tween__ float in(float s, float e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ float out(float s, float e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ float inout(float s, float e, float t, float d)
+        {
+            return out(s, e, t / d);
         }
     }
 
@@ -193,6 +268,21 @@ namespace tween
                 ? in(s, s + (e - s) * 0.5f, t * 2.0f)
                 : out(s + (e - s) * 0.5f, e, (t - 0.5f) * 2.0f);
         }
+
+        __tween__ float in(float s, float e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ float out(float s, float e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ float inout(float s, float e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
     }
 
     namespace circle
@@ -212,6 +302,21 @@ namespace tween
             return (t *= 2.0f) < 1.0f
                 ? s + (s - e) * 0.5f * (sqrtf(1.0f - t * t) - 1.0f)
                 : s + (e - s) * 0.5f * (sqrtf(1.0f - (t - 2.0f) * (t - 2.0f)) + 1.0f);
+        }
+
+        __tween__ float in(float s, float e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ float out(float s, float e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ float inout(float s, float e, float t, float d)
+        {
+            return out(s, e, t / d);
         }
     }
 
@@ -264,6 +369,21 @@ namespace tween
                 return e + 0.5f * (a * p * q);
             }
         }
+
+        __tween__ float in(float s, float e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ float out(float s, float e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ float inout(float s, float e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
     }
 
     namespace bounce
@@ -300,6 +420,21 @@ namespace tween
             return t < 0.5f
                 ? in(s, s + (e - s) * 0.5f, t * 2.0f)
                 : out(s + (e - s) * 0.5f, e, (t - 0.5f) * 2.0f);
+        }
+
+        __tween__ float in(float s, float e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ float out(float s, float e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ float inout(float s, float e, float t, float d)
+        {
+            return out(s, e, t / d);
         }
     }
 }
