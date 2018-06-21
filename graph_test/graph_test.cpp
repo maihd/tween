@@ -11,10 +11,10 @@
 #include <imgui_impl_sdl.h>
 #include <imgui_impl_opengl3.h>
 
-#include "../tween.h"
-#include "../tween.hpp"          
+#include "vmath/vmath.h"
 
-#define TEST_C_VERSION
+#include "../tween.h"
+#include "../tween.hpp"      
 
 
 void show_message_box(const char* msg, SDL_Window* window = NULL)
@@ -197,24 +197,24 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 
 #define TWEEN_FUNC(x) x ,     
     typedef float (*tween_f)(float, float, float, float);
-    tween_f tween_funcs[] =
+    tween_f tween_c_funcs[] =
     {
-    #ifdef TEST_C_VERSION
     #include "tween_funcs.h"
-    #else
+    };
+    tween_f tween_cpp_funcs[] =
+    {
     #include "tween_funcs.hpp"
-    #endif
     };
 #undef TWEEN_FUNC
 
 #define TWEEN_FUNC(x) #x ,
-    const char* tween_funcnames[] = 
+    const char* tween_c_funcnames[] = 
     {
-    #ifdef TEST_C_VERSION
     #include "tween_funcs.h"
-    #else
+    };
+    const char* tween_cpp_funcnames[] =
+    {
     #include "tween_funcs.hpp"
-    #endif
     };
 #undef TWEEN_FUNC
 
@@ -250,11 +250,15 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 
         static int func = 0;
         static float pos;
+        static bool c_version = false;
         if (ImGui::Begin("Menu"))
         {
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
-            if (ImGui::Combo("Functions", &func, tween_funcnames, IM_ARRAYSIZE(tween_funcnames)))
+            ImGui::Checkbox("C version", &c_version);
+
+            const char** funcnames = (c_version ? tween_c_funcnames : tween_cpp_funcnames);
+            if (ImGui::Combo("Functions", &func, funcnames, IM_ARRAYSIZE(tween_c_funcnames)))
             {
                 pos = 0;
             }
@@ -263,8 +267,10 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 
         if (ImGui::Begin("Graph"))
         {
-            ImGui::Text("Functions: %s", tween_funcnames[func]);
-            ImGui::TweenGraph(tween_funcnames[func], tween_funcs[func]);
+            tween_f* funcs = (c_version ? tween_c_funcs : tween_cpp_funcs);
+            const char** funcnames = (c_version ? tween_c_funcnames : tween_cpp_funcnames);
+            ImGui::Text("Functions: %s", funcnames[func]);
+            ImGui::TweenGraph(funcnames[func], funcs[func]);
         }
         ImGui::End();
 
@@ -286,13 +292,14 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
                     time = 0.0f;
                 }
 
+                tween_f* funcs = (c_version ? tween_c_funcs : tween_cpp_funcs);
                 if (sign > 0)
                 {
-                    pos = tween_funcs[func](size.x * 0.1f, size.x * 0.9f, time, 1.0f);
+                    pos = funcs[func](size.x * 0.1f, size.x * 0.9f, time, 1.0f);
                 }
                 else
                 {
-                    pos = tween_funcs[func](size.x * 0.9f, size.x * 0.1f, time, 1.0f);
+                    pos = funcs[func](size.x * 0.9f, size.x * 0.1f, time, 1.0f);
                 }
                 DrawList->AddCircle(ImVec2(cursor.x + pos, cursor.y + size.y * 0.5f), 12.0f, ImGui::GetColorU32(ImGuiCol_TextDisabled));
             }

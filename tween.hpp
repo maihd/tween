@@ -19,7 +19,6 @@
  *    - float : mainly support
  *    - vec2  : extensions, require vmath
  *    - vec3  : extensions, require vmath
- *    - vec4  : extensions, require vmath
  * 
  *   Eases:
  *    - in
@@ -74,6 +73,11 @@ namespace tween
         return s + (e - s) * t;
     }
 
+    __tween__ float linear(float s, float e, float t, float d)
+    {
+        return linear(s, e, t / d);
+    }
+
     namespace quad 
     {   
         __tween__ float in(float s, float e, float t)
@@ -90,7 +94,7 @@ namespace tween
         {
             return (t *= 2.0f) < 1.0f
                 ? s + (e - s) * 0.5f * t * t
-                : s + (s - e) * 0.5f * ((t - 1.0f) * (t - 3.0f) - 1.0f);
+                : s + (s - e) * 0.5f * ((t -= 1.0f) * (t - 2.0f) - 1.0f);
         }
 
         __tween__ float in(float s, float e, float t, float d)
@@ -105,7 +109,7 @@ namespace tween
 
         __tween__ float inout(float s, float e, float t, float d)
         {
-            return out(s, e, t / d);
+            return inout(s, e, t / d);
         }
     }
 
@@ -140,7 +144,7 @@ namespace tween
 
         __tween__ float inout(float s, float e, float t, float d)
         {
-            return out(s, e, t / d);
+            return inout(s, e, t / d);
         }
     }
 
@@ -159,7 +163,7 @@ namespace tween
         __tween__ float inout(float s, float e, float t)
         {
             return (t *= 2.0f) < 1.0f
-                ? s + (e - s) * 0.5f * t * t * t
+                ? s + (e - s) * 0.5f * t * t * t * t
                 : s + (s - e) * 0.5f * ((t -= 2.0f) * t * t * t - 2.0f);
         }
 
@@ -175,7 +179,7 @@ namespace tween
 
         __tween__ float inout(float s, float e, float t, float d)
         {
-            return out(s, e, t / d);
+            return inout(s, e, t / d);
         }
     }
 
@@ -210,7 +214,7 @@ namespace tween
 
         __tween__ float inout(float s, float e, float t, float d)
         {
-            return out(s, e, t / d);
+            return inout(s, e, t / d);
         }
     }
 
@@ -243,7 +247,7 @@ namespace tween
 
         __tween__ float inout(float s, float e, float t, float d)
         {
-            return out(s, e, t / d);
+            return inout(s, e, t / d);
         }
     }
 
@@ -281,7 +285,7 @@ namespace tween
 
         __tween__ float inout(float s, float e, float t, float d)
         {
-            return out(s, e, t / d);
+            return inout(s, e, t / d);
         }
     }
 
@@ -316,7 +320,7 @@ namespace tween
 
         __tween__ float inout(float s, float e, float t, float d)
         {
-            return out(s, e, t / d);
+            return inout(s, e, t / d);
         }
     }
 
@@ -382,7 +386,7 @@ namespace tween
 
         __tween__ float inout(float s, float e, float t, float d)
         {
-            return out(s, e, t / d);
+            return inout(s, e, t / d);
         }
     }
 
@@ -434,9 +438,797 @@ namespace tween
 
         __tween__ float inout(float s, float e, float t, float d)
         {
-            return out(s, e, t / d);
+            return inout(s, e, t / d);
         }
     }
 }
-
 #endif
+
+#if defined(__VMATH_H__) && !defined(__TWEEN_VMATH__)
+#define __TWEEN_VMATH__
+namespace tween
+{
+    __tween__ vec2_t linear(vec2_t s, vec2_t e, float t)
+    {
+        vec2_t r;
+        r.x = linear(s.x, e.x, t);
+        r.y = linear(s.y, e.y, t);
+        return r;
+    }
+
+    __tween__ vec3_t linear(vec3_t s, vec3_t e, float t)
+    {
+        vec3_t r;
+        r.x = linear(s.x, e.x, t);
+        r.y = linear(s.y, e.y, t);
+        r.z = linear(s.z, e.z, t);
+        return r;
+    }
+
+    __tween__ vec2_t linear(vec2_t s, vec2_t e, float t, float d)
+    {
+        return linear(s, e, t / d);
+    }
+
+    __tween__ vec3_t linear(vec3_t s, vec3_t e, float t, float d)
+    {
+        return linear(s, e, t / d);
+    }
+
+    namespace quad
+    {
+        __tween__ vec2_t in(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = in(s.x, e.x, t);
+            r.y = in(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t in(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = in(s.x, e.x, t);
+            r.y = in(s.y, e.y, t);
+            r.z = in(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t out(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = out(s.x, e.x, t);
+            r.y = out(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t out(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = out(s.x, e.x, t);
+            r.y = out(s.y, e.y, t);
+            r.z = out(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t inout(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = inout(s.x, e.x, t);
+            r.y = inout(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t inout(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = inout(s.x, e.x, t);
+            r.y = inout(s.y, e.y, t);
+            r.z = inout(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t in(vec2_t s, vec2_t e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ vec3_t in(vec3_t s, vec3_t e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ vec2_t out(vec2_t s, vec2_t e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ vec3_t out(vec3_t s, vec3_t e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ vec2_t inout(vec2_t s, vec2_t e, float t, float d)
+        {
+            return inout(s, e, t / d);
+        }
+
+        __tween__ vec3_t inout(vec3_t s, vec3_t e, float t, float d)
+        {
+            return inout(s, e, t / d);
+        }
+    }
+
+    namespace cubic
+    {
+        __tween__ vec2_t in(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = in(s.x, e.x, t);
+            r.y = in(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t in(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = in(s.x, e.x, t);
+            r.y = in(s.y, e.y, t);
+            r.z = in(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t out(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = out(s.x, e.x, t);
+            r.y = out(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t out(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = out(s.x, e.x, t);
+            r.y = out(s.y, e.y, t);
+            r.z = out(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t inout(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = inout(s.x, e.x, t);
+            r.y = inout(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t inout(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = inout(s.x, e.x, t);
+            r.y = inout(s.y, e.y, t);
+            r.z = inout(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t in(vec2_t s, vec2_t e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ vec3_t in(vec3_t s, vec3_t e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ vec2_t out(vec2_t s, vec2_t e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ vec3_t out(vec3_t s, vec3_t e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ vec2_t inout(vec2_t s, vec2_t e, float t, float d)
+        {
+            return inout(s, e, t / d);
+        }
+
+        __tween__ vec3_t inout(vec3_t s, vec3_t e, float t, float d)
+        {
+            return inout(s, e, t / d);
+        }
+    }
+
+    namespace quart
+    {
+        __tween__ vec2_t in(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = in(s.x, e.x, t);
+            r.y = in(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t in(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = in(s.x, e.x, t);
+            r.y = in(s.y, e.y, t);
+            r.z = in(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t out(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = out(s.x, e.x, t);
+            r.y = out(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t out(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = out(s.x, e.x, t);
+            r.y = out(s.y, e.y, t);
+            r.z = out(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t inout(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = inout(s.x, e.x, t);
+            r.y = inout(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t inout(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = inout(s.x, e.x, t);
+            r.y = inout(s.y, e.y, t);
+            r.z = inout(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t in(vec2_t s, vec2_t e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ vec3_t in(vec3_t s, vec3_t e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ vec2_t out(vec2_t s, vec2_t e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ vec3_t out(vec3_t s, vec3_t e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ vec2_t inout(vec2_t s, vec2_t e, float t, float d)
+        {
+            return inout(s, e, t / d);
+        }
+
+        __tween__ vec3_t inout(vec3_t s, vec3_t e, float t, float d)
+        {
+            return inout(s, e, t / d);
+        }
+    }
+
+    namespace quint
+    {
+        __tween__ vec2_t in(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = in(s.x, e.x, t);
+            r.y = in(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t in(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = in(s.x, e.x, t);
+            r.y = in(s.y, e.y, t);
+            r.z = in(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t out(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = out(s.x, e.x, t);
+            r.y = out(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t out(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = out(s.x, e.x, t);
+            r.y = out(s.y, e.y, t);
+            r.z = out(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t inout(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = inout(s.x, e.x, t);
+            r.y = inout(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t inout(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = inout(s.x, e.x, t);
+            r.y = inout(s.y, e.y, t);
+            r.z = inout(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t in(vec2_t s, vec2_t e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ vec3_t in(vec3_t s, vec3_t e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ vec2_t out(vec2_t s, vec2_t e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ vec3_t out(vec3_t s, vec3_t e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ vec2_t inout(vec2_t s, vec2_t e, float t, float d)
+        {
+            return inout(s, e, t / d);
+        }
+
+        __tween__ vec3_t inout(vec3_t s, vec3_t e, float t, float d)
+        {
+            return inout(s, e, t / d);
+        }
+    }
+
+    namespace sine
+    {
+        __tween__ vec2_t in(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = in(s.x, e.x, t);
+            r.y = in(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t in(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = in(s.x, e.x, t);
+            r.y = in(s.y, e.y, t);
+            r.z = in(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t out(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = out(s.x, e.x, t);
+            r.y = out(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t out(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = out(s.x, e.x, t);
+            r.y = out(s.y, e.y, t);
+            r.z = out(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t inout(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = inout(s.x, e.x, t);
+            r.y = inout(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t inout(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = inout(s.x, e.x, t);
+            r.y = inout(s.y, e.y, t);
+            r.z = inout(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t in(vec2_t s, vec2_t e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ vec3_t in(vec3_t s, vec3_t e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ vec2_t out(vec2_t s, vec2_t e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ vec3_t out(vec3_t s, vec3_t e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ vec2_t inout(vec2_t s, vec2_t e, float t, float d)
+        {
+            return inout(s, e, t / d);
+        }
+
+        __tween__ vec3_t inout(vec3_t s, vec3_t e, float t, float d)
+        {
+            return inout(s, e, t / d);
+        }
+    }
+
+    namespace expo
+    {
+        __tween__ vec2_t in(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = in(s.x, e.x, t);
+            r.y = in(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t in(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = in(s.x, e.x, t);
+            r.y = in(s.y, e.y, t);
+            r.z = in(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t out(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = out(s.x, e.x, t);
+            r.y = out(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t out(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = out(s.x, e.x, t);
+            r.y = out(s.y, e.y, t);
+            r.z = out(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t inout(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = inout(s.x, e.x, t);
+            r.y = inout(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t inout(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = inout(s.x, e.x, t);
+            r.y = inout(s.y, e.y, t);
+            r.z = inout(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t in(vec2_t s, vec2_t e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ vec3_t in(vec3_t s, vec3_t e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ vec2_t out(vec2_t s, vec2_t e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ vec3_t out(vec3_t s, vec3_t e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ vec2_t inout(vec2_t s, vec2_t e, float t, float d)
+        {
+            return inout(s, e, t / d);
+        }
+
+        __tween__ vec3_t inout(vec3_t s, vec3_t e, float t, float d)
+        {
+            return inout(s, e, t / d);
+        }
+    }
+
+    namespace circle
+    {
+        __tween__ vec2_t in(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = in(s.x, e.x, t);
+            r.y = in(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t in(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = in(s.x, e.x, t);
+            r.y = in(s.y, e.y, t);
+            r.z = in(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t out(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = out(s.x, e.x, t);
+            r.y = out(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t out(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = out(s.x, e.x, t);
+            r.y = out(s.y, e.y, t);
+            r.z = out(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t inout(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = inout(s.x, e.x, t);
+            r.y = inout(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t inout(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = inout(s.x, e.x, t);
+            r.y = inout(s.y, e.y, t);
+            r.z = inout(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t in(vec2_t s, vec2_t e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ vec3_t in(vec3_t s, vec3_t e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ vec2_t out(vec2_t s, vec2_t e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ vec3_t out(vec3_t s, vec3_t e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ vec2_t inout(vec2_t s, vec2_t e, float t, float d)
+        {
+            return inout(s, e, t / d);
+        }
+
+        __tween__ vec3_t inout(vec3_t s, vec3_t e, float t, float d)
+        {
+            return inout(s, e, t / d);
+        }
+    }
+
+    namespace elastic
+    {
+        __tween__ vec2_t in(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = in(s.x, e.x, t);
+            r.y = in(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t in(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = in(s.x, e.x, t);
+            r.y = in(s.y, e.y, t);
+            r.z = in(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t out(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = out(s.x, e.x, t);
+            r.y = out(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t out(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = out(s.x, e.x, t);
+            r.y = out(s.y, e.y, t);
+            r.z = out(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t inout(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = inout(s.x, e.x, t);
+            r.y = inout(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t inout(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = inout(s.x, e.x, t);
+            r.y = inout(s.y, e.y, t);
+            r.z = inout(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t in(vec2_t s, vec2_t e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ vec3_t in(vec3_t s, vec3_t e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ vec2_t out(vec2_t s, vec2_t e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ vec3_t out(vec3_t s, vec3_t e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ vec2_t inout(vec2_t s, vec2_t e, float t, float d)
+        {
+            return inout(s, e, t / d);
+        }
+
+        __tween__ vec3_t inout(vec3_t s, vec3_t e, float t, float d)
+        {
+            return inout(s, e, t / d);
+        }
+    }
+
+    namespace bounce
+    {
+        __tween__ vec2_t in(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = in(s.x, e.x, t);
+            r.y = in(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t in(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = in(s.x, e.x, t);
+            r.y = in(s.y, e.y, t);
+            r.z = in(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t out(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = out(s.x, e.x, t);
+            r.y = out(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t out(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = out(s.x, e.x, t);
+            r.y = out(s.y, e.y, t);
+            r.z = out(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t inout(vec2_t s, vec2_t e, float t)
+        {
+            vec2_t r;
+            r.x = inout(s.x, e.x, t);
+            r.y = inout(s.y, e.y, t);
+            return r;
+        }
+
+        __tween__ vec3_t inout(vec3_t s, vec3_t e, float t)
+        {
+            vec3_t r;
+            r.x = inout(s.x, e.x, t);
+            r.y = inout(s.y, e.y, t);
+            r.z = inout(s.z, e.z, t);
+            return r;
+        }
+
+        __tween__ vec2_t in(vec2_t s, vec2_t e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ vec3_t in(vec3_t s, vec3_t e, float t, float d)
+        {
+            return in(s, e, t / d);
+        }
+
+        __tween__ vec2_t out(vec2_t s, vec2_t e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ vec3_t out(vec3_t s, vec3_t e, float t, float d)
+        {
+            return out(s, e, t / d);
+        }
+
+        __tween__ vec2_t inout(vec2_t s, vec2_t e, float t, float d)
+        {
+            return inout(s, e, t / d);
+        }
+
+        __tween__ vec3_t inout(vec3_t s, vec3_t e, float t, float d)
+        {
+            return inout(s, e, t / d);
+        }
+    }
+}
+#endif /* __VMATH_H__ */
